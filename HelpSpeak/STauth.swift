@@ -21,7 +21,7 @@ public
     preferences.javaScriptEnabled = true
     
     let params = [
-        "client_id":"gk1nFtbQr4pBpJD0rzAp3vaSi555sm4s",
+        "client_id":"<Client_ID>",
         "scope":"openid phone offline_access&",
         "state":"statecode&",
         "response_type":"code&",
@@ -42,7 +42,7 @@ public
             "grant_type": "authorization_code",
             "code": "3000/callback",
             "client_id": "gk1nFtbQr4pBpJD0rzAp3vaSi555sm4s",
-            "client_secret": "eWTSj_izMvD3nBJFXxkRDZF4aXDGKofYRZyzw_31oer31kuoY6-OVDs27nEHJu0B",
+            "client_secret": "<Client_Secret>",
             "redirect_uri": "http://localhost:3000/callback"
         ]
         Alamofire.request("https://login-sandbox.safetrek.io/oauth/token", method: .post, parameters: params).responseJSON{ response in
