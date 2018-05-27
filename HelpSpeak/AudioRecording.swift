@@ -12,30 +12,77 @@ import Alamofire
 
 
 extension ViewController{
-
-
-    func setupRecorder (){
-        var recordSettings = [AVFormatIDKey: kAudioFormatAppleLossless,
-                              AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue,
-                              AVEncoderBitRateKey: 320000,
-                              AVNumberOfChannelsKey: 2,
-                              AVSampleRateKey: 44100.0] as [String : Any]
-        var error: Error?
-        var soundRecorder = AVAudioRecorder
-    }
-    
-    func getCacheDirectory() -> String{
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearcgPathDomainMask.UserDomainMask, true) as! [String]
-        
+    // get audio file location
+    func getAudioFileUrl() -> URL{
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        print("GETTING FILE")
         return paths[0]
     }
     
-    func getFileUrl() -> NSURL{
-        let path =
-        
+    // recording
+    func startRecording (){
+        let session = AVAudioSession.sharedInstance() //Creates the session
+        isRecording = true
+        let audioUrl = getAudioFileUrl().appendingPathComponent("recording.m4a")
+        print(audioUrl)
+        do {
+            
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord, with:.defaultToSpeaker)
+            try session.setActive(true)
+            
+            let settings = [
+                AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                AVSampleRateKey: 36000,
+                AVNumberOfChannelsKey: 1,
+                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+                ] as [String : Any]
+            
+            // Create the audio recording and assign ourselves as the delgate
+            
+            soundRecorder = try AVAudioRecorder (url: audioUrl, settings: settings)
+            soundRecorder.delegate = self
+            soundRecorder.record()
+            print("RECORDING")
+
+        }
+        catch let error{
+            print("tap a button")
+        }
         
     }
+    
+    func stopRecording(){
+        soundRecorder.stop()
+        isRecording = false
+        print("RECORDING STOPPED")
+    }
+    
+    
+    
+    //for playing the recording
+    func playRecording(){
+        let url = getAudioFileUrl()
+        do {
+            // Setting up with the saved fire URL
 
+            let sound = try AVAudioPlayer(contentsOf: url)
+            self.soundPlayer = sound
+            
+            
+            // setting up delegate
+            sound.delegate = self
+            sound.prepareToPlay()
+            sound.play()
+            print("PLAYING RECORDING")
+
+            
+        }catch {
+            print("error loading file")
+        }
+    }
+    
+    
+    
 
 
 
