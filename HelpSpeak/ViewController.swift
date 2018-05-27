@@ -34,7 +34,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, SFSafariViewC
     var lati : CLLocation? // Location Object used for the buttons
 
     //Recording setup
-    var soundRecorder = AVAudioRecorder()
+    var recordingSession = AVAudioSession()
+    var soundRecorder : AVAudioRecorder!
     var soundPlayer = AVAudioPlayer()
     var isRecording = false
     
@@ -50,18 +51,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate, SFSafariViewC
         locationmanager.requestWhenInUseAuthorization()
         
         
+        
         // Asking user permission for accessing Microphone
-        AVAudioSession.sharedInstance().requestRecordPermission () {
-            [unowned self] allowed in
-            if allowed {
-                // Microphone allowed, do what you like!
-                self.startRecording()
-                
-            } else {
-                // User denied microphone. Tell them off!
-                
+        recordingSession = AVAudioSession.sharedInstance()
+        do {
+            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try recordingSession.setActive(true)
+            recordingSession.requestRecordPermission() { [unowned self] allowed in
+                DispatchQueue.main.async {
+                    if allowed {
+                        self.startRecording()
+                    } else {
+                        print("Dont Allow")
+                    }
+                }
             }
+        } catch {
+            print("failed to record!")
         }
+
 
     }
     
@@ -92,153 +100,49 @@ class ViewController: UIViewController, CLLocationManagerDelegate, SFSafariViewC
         
     }
     
+    @IBAction func TestRecording(_ sender: Any) {
+        stopRecording()
+        isRecording = false
+        playRecording()
+        
+    }
+    
     @IBAction func StopRecordingButton(_ sender: Any) {
         self.stopRecording()
         self.playRecording()
     }
     
-    
+    func popUpSummon(){
+        let popupVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"EVPopUP") as! PopupViewController
+        self.addChildViewController(popupVC)
+        popupVC.view.frame = self.view.frame
+        self.view.addSubview(popupVC.view)
+        popupVC.didMove(toParentViewController: self)
+    }
     
     @IBAction func Allbutton(_ sender: Any) {
-        getAccessST()
-        getToken()
-        var params = [
-            "Authorization": "Bearer <Token>",
-            "Content-Type": "application/json",
-            "Services":[
-                "services.police":"true",
-                "services.fire": "true",
-                "services.medical": "true"],
-            "location.coordinates": [
-                "lat": lati?.coordinate.latitude,
-                "lng": lati?.coordinate.longitude,
-                "accuracy": lati?.horizontalAccuracy] as [String: Any]
-            ] as [String:Any]
+        allbutton()
+        popUpSummon()
         
-        Alamofire.request("https://api.safetrek.io/v1/alarms", method: .post, parameters: params).responseString { response in
-            print("Request for Police: \(response.request)\n")
-            print ("Response for Police: \(response.response)\n")
-            print("Error for Police: \(response.error)\n")
-            
-            print (response.result.isSuccess)
-            if let json = response.result.value{
-                print ("Json: \(json)")
-            }
-            
-        }
-        
-        //Gets the Pop Up for recording evidence
-        let popupVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"EVPopUP") as! PopupViewController
-        self.addChildViewController(popupVC)
-        popupVC.view.frame = self.view.frame
-        self.view.addSubview(popupVC.view)
-        popupVC.didMove(toParentViewController: self)
-}
+       
+    }
    
     @IBAction func PoliceButton(_ sender: Any) {
-
-        getAccessST()
-        getToken()
-        var params = [
-            "Authorization": "Bearer <Token>",
-            "Content-Type": "application/json",
-            "Services":[
-                "services.police":"true",
-                "services.fire": "false",
-                "services.medical": "false"],
-            "location.coordinates": [
-                "lat": lati?.coordinate.latitude,
-                "lng": lati?.coordinate.longitude,
-                "accuracy": lati?.horizontalAccuracy] as [String: Any]
-            ] as [String:Any]
-        
-        Alamofire.request("https://api.safetrek.io/v1/alarms", method: .post, parameters: params).responseString { response in
-            print("Request for Police: \(response.request)\n")
-            print ("Response for Police: \(response.response)\n")
-            print("Error for Police: \(response.error)\n")
-            
-            print (response.result.isSuccess)
-            if let json = response.result.value{
-                print ("Json: \(json)")
-            }
-            
-        }
-        let popupVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"EVPopUP") as! PopupViewController
-        self.addChildViewController(popupVC)
-        popupVC.view.frame = self.view.frame
-        self.view.addSubview(popupVC.view)
-        popupVC.didMove(toParentViewController: self)
-    
+        policeButton()
+        popUpSummon()
         }
     
     @IBAction func EMSButton(_ sender: Any) {
-        getAccessST()
-        getToken()
-        var params = [
-            "Authorization": "Bearer <Token>",
-            "Content-Type": "application/json",
-            "Services":[
-                "services.police":"false",
-                "services.fire": "false",
-                "services.medical": "true"],
-            "location.coordinates": [
-                "lat": lati?.coordinate.latitude,
-                "lng": lati?.coordinate.longitude,
-                "accuracy": lati?.horizontalAccuracy] as [String: Any]
-            ] as [String:Any]
-        
-        Alamofire.request("https://api.safetrek.io/v1/alarms", method: .post, parameters: params).responseString { response in
-            print("Request for Police: \(response.request)\n")
-            print ("Response for Police: \(response.response)\n")
-            print("Error for Police: \(response.error)\n")
-            
-            print (response.result.isSuccess)
-            if let json = response.result.value{
-                print ("Json: \(json)")
-            }
-            
-        }
-        let popupVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"EVPopUP") as! PopupViewController
-        self.addChildViewController(popupVC)
-        popupVC.view.frame = self.view.frame
-        self.view.addSubview(popupVC.view)
-        popupVC.didMove(toParentViewController: self)
+        emsButton()
+        popUpSummon()
     }
     
     @IBAction func FireButton(_ sender: Any) {
-        getAccessST()
-        getToken()
-        var params = [
-            "Authorization": "Bearer <Token>",
-            "Content-Type": "application/json",
-            "Services":[
-                "services.police":"false",
-                "services.fire": "true",
-                "services.medical": "false"],
-            "location.coordinates": [
-                "lat": lati?.coordinate.latitude,
-                "lng": lati?.coordinate.longitude,
-                "accuracy": lati?.horizontalAccuracy] as [String: Any]
-            ] as [String:Any]
-        
-        Alamofire.request("https://api.safetrek.io/v1/alarms", method: .post, parameters: params).responseString { response in
-            print("Request for Police: \(response.request)\n")
-            print ("Response for Police: \(response.response)\n")
-            print("Error for Police: \(response.error)\n")
-            
-            print (response.result.isSuccess)
-            if let json = response.result.value{
-                print ("Json: \(json)")
-            }
-            
-        }
-        let popupVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier:"EVPopUP") as! PopupViewController
-        self.addChildViewController(popupVC)
-        popupVC.view.frame = self.view.frame
-        self.view.addSubview(popupVC.view)
-        popupVC.didMove(toParentViewController: self)
+        fireButton()
+        popUpSummon()
     }
     
-    }
+}
+
 
 
