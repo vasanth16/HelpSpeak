@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -97,6 +98,67 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="114" y="121"/>
+        </scene>
+        <!--PopupforEvRecording-->
+        <scene sceneID="onJ-gt-Zg5">
+            <objects>
+                <viewController storyboardIdentifier="EVPopUP" title="PopupforEvRecording" id="kaM-lg-e2R" customClass="PopupViewController" customModule="HelpSpeak" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YKe-pM-WM7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-cz-0gg">
+                                <rect key="frame" x="90" y="220" width="195" height="247"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SE8-D9-2Ky">
+                                        <rect key="frame" x="25" y="152" width="147" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Tap to stop and listen"/>
+                                        <connections>
+                                            <action selector="StopRecordandClose:" destination="kaM-lg-e2R" eventType="touchUpInside" id="qSn-A3-zJ6"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="RECORDING AUDIO" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cV-0U-SfR">
+                                        <rect key="frame" x="21" y="60" width="153" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c0v-2Q-Tep">
+                                        <rect key="frame" x="82" y="181" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Exit"/>
+                                        <connections>
+                                            <action selector="ExitButton:" destination="kaM-lg-e2R" eventType="touchUpInside" id="uuN-z0-rNb"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="6A6-cz-0gg" secondAttribute="height" multiplier="15:19" id="SYq-E3-UUf"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0wz-pf-Mv9" firstAttribute="bottom" secondItem="6A6-cz-0gg" secondAttribute="bottom" constant="200" id="GEX-Ev-F4l"/>
+                            <constraint firstItem="6A6-cz-0gg" firstAttribute="centerX" secondItem="YKe-pM-WM7" secondAttribute="centerX" id="Kgu-ty-2kO"/>
+                            <constraint firstItem="6A6-cz-0gg" firstAttribute="centerY" secondItem="YKe-pM-WM7" secondAttribute="centerY" id="S74-5B-xIz"/>
+                            <constraint firstItem="6A6-cz-0gg" firstAttribute="centerY" secondItem="YKe-pM-WM7" secondAttribute="centerY" id="isn-yD-kby"/>
+                            <constraint firstItem="6A6-cz-0gg" firstAttribute="top" secondItem="0wz-pf-Mv9" secondAttribute="top" constant="200" id="qBf-WK-1xl"/>
+                            <constraint firstItem="6A6-cz-0gg" firstAttribute="centerX" secondItem="YKe-pM-WM7" secondAttribute="centerX" id="rZf-nS-gZ6"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="0wz-pf-Mv9"/>
+                    </view>
+                    <connections>
+                        <outlet property="ExitButton" destination="c0v-2Q-Tep" id="c1e-f2-jCj"/>
+                        <outlet property="StopRecordingandClose" destination="YKe-pM-WM7" id="Y3I-0o-CUD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B5Z-IT-OTn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="940" y="111.0944527736132"/>
         </scene>
     </scenes>
 </document>
